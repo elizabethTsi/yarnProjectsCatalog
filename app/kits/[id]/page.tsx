@@ -43,9 +43,13 @@ export default function KitDetailsPage() {
         fetchData()
     }, [])
 
-    function updateField <K extends keyof Kit>(columnName: K, dataToReplace: Kit[K]) 
+    async function updateField <K extends keyof Kit>(columnName: K, dataToInsert: Kit[K]) 
     {
-        console.log("work's");
+        const {data, error} = await supabase
+            .from("kits")
+            .update({[columnName]: dataToInsert})
+            .eq("id", kitDetails?.id)
+        fetchData();
     }
 
     
@@ -116,52 +120,182 @@ export default function KitDetailsPage() {
                     {editMode &&
                     <div className="mt-16 w-[500px] ml-10 bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
                         <div className="grid grid-cols-2 gap-x-10 gap-y-6">
+     
+                            <form className="flex flex-col"
+                                onSubmit={async (e) => {
+                                    e.preventDefault();
 
-                            <div className="flex flex-col">
+                                    const formData = new FormData(e.currentTarget);
+                                    const rawValue = formData.get("hook_size");
+                                    if (rawValue === null) return;
+
+                                    const value = Number(rawValue);
+
+                                    updateField("hook_size", value);
+                                }}
+                            >
                                 <label className="font-bold text-lg text-black tracking-wide mb-1">Hook Size</label>
-                                <div className="px-3 py-2 border rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer">
-                                    {kitDetails?.hook_size ?? "—"}
-                                </div>
-                            </div>
+                                <input 
+                                    className="px-3 py-2 border rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer"
+                                    type="text"
+                                    placeholder = {`${kitDetails?.hook_size ?? "—"}`}
+                                    name="hook_size"
+                                    
+                                />
+                                <button
+                                    type="submit"
+                                    className="self-center bg-purple-300 text-white py-1 mt-2 w-3/5 rounded-md text-sm font-semibold hover:bg-purple-400 active:scale-95 transition"
+                                >
+                                    Save Changes
+                                </button>
+                            </form>
 
-                            <div className="flex flex-col">
+                            <form className="flex flex-col"
+                                onSubmit={async (e) => {
+                                    e.preventDefault();
+
+                                    const formData = new FormData(e.currentTarget);
+                                    const rawValue = formData.get("yarn_type");
+                                    if (rawValue === null) return;
+
+                                    const value = String(rawValue);
+
+                                    updateField("yarn_type", value);
+                                }}
+                            >
                                 <label className="font-bold text-lg text-black tracking-wide mb-1">Yarn Type</label>
-                                <div className="px-3 py-2 border rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer">
-                                    {kitDetails?.yarn_type ?? "—"}
-                                </div>
-                            </div>
+                                <input 
+                                    className="px-3 py-2 border rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer"
+                                    type="text"
+                                    placeholder = {`${kitDetails?.yarn_type ?? "—"}`}
+                                    name="yarn_type"
+                                />
+                                <button
+                                    type="submit"
+                                    className="self-center bg-purple-300 text-white py-1 mt-2 w-3/5 rounded-md text-sm font-semibold hover:bg-purple-400 active:scale-95 transition"
+                                >
+                                    Save Changes
+                                </button>
+                            </form>
 
-                            <div className="flex flex-col">
+                            <form className="flex flex-col"
+                                onSubmit={async (e: React.FormEvent<HTMLFormElement>) => {
+                                    e.preventDefault();
+
+                                    // Tell TS this is an HTMLFormElement
+                                    const form = e.currentTarget as HTMLFormElement;
+
+                                    // Pull all values
+                                    const formData = new FormData(form);
+                                    const rawValue = formData.get("brand");
+
+                                    if (rawValue === null) return; // nothing entered
+
+                                    const value = String(rawValue);
+
+                                    // Call your generic Supabase update function
+                                    await updateField("brand", value);
+                                }}
+                            >
                                 <label className="font-bold text-lg text-black tracking-wide mb-1">Brand</label>
-                                <div className="px-3 py-2 border rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer">
-                                    {kitDetails?.brand ?? "—"}
-                                </div>
-                            </div>
+                                <input 
+                                    className="px-3 py-2 border rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer"
+                                    type="text"
+                                    placeholder = {`${kitDetails?.brand ?? "—"}`}
+                                    name="brand"
+                                />
+                                <button
+                                    type="submit"
+                                    className="self-center bg-purple-300 text-white py-1 mt-2 w-3/5 rounded-md text-sm font-semibold hover:bg-purple-400 active:scale-95 transition"
+                                >
+                                    Save Changes
+                                </button>
+                            </form>
 
-                            <div className="flex flex-col">
+                            <form className="flex flex-col"
+                                onSubmit={async (e) => {
+                                    e.preventDefault();
+
+                                    const formData = new FormData(e.currentTarget);
+                                    const rawValue = formData.get("got_from");
+                                    if (rawValue === null) return;
+
+                                    const value = String(rawValue);
+
+                                    updateField("got_from", value);
+                                }}
+                            >
                                 <label className="font-bold text-lg text-black tracking-wide mb-1">Source</label>
-                                <div className="px-3 py-2 border rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer">
-                                    {kitDetails?.got_from ?? "—"}
-                                </div>
-                            </div>
+                                <input 
+                                    className="px-3 py-2 border rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer"
+                                    type="text"
+                                    placeholder = {`${kitDetails?.got_from ?? "—"}`}
+                                    name="got_from"
+                                />
+                                <button
+                                    type="submit"
+                                    className="self-center bg-purple-300 text-white py-1 mt-2 w-3/5 rounded-md text-sm font-semibold hover:bg-purple-400 active:scale-95 transition"
+                                >
+                                    Save Changes
+                                </button>
+                            </form>
 
-                            <div className="flex flex-col">
+                            <form className="flex flex-col"onSubmit={async (e) => {
+                                e.preventDefault();
+
+                                const formData = new FormData(e.currentTarget);
+                                const rawValue = formData.get("start_time");
+                                if (rawValue === null) return;
+                                if (!rawValue || typeof rawValue !== "string") return;
+                                const value = new Date(rawValue);
+
+                                updateField("start_time", value);
+                            }}>
                                 <label className="font-bold text-lg text-black tracking-wide mb-1">Date Started</label>
-                                <div className="px-3 py-2 border rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer">
-                                    {kitDetails?.start_time
+                                <input 
+                                    className="px-3 py-2 border rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer"
+                                    type="text"
+                                    placeholder = {`${kitDetails?.start_time
                                     ? new Date(kitDetails.start_time).toLocaleDateString()
-                                    : "—"}
-                                </div>
-                            </div>
+                                    : "—"}`}
+                                    name="start_time"
+                                />
+                                <button
+                                    type="submit"
+                                    className="self-center bg-purple-300 text-white py-1 mt-2 w-3/5 rounded-md text-sm font-semibold hover:bg-purple-400 active:scale-95 transition"
+                                >
+                                    Save Changes
+                                </button>
+                            </form>
 
-                            <div className="flex flex-col">
+                            <form className="flex flex-col"
+                            onSubmit={async (e) => {
+                                e.preventDefault();
+
+                                const formData = new FormData(e.currentTarget);
+                                const rawValue = formData.get("end_time");
+                                if (rawValue === null) return;
+                                if (!rawValue || typeof rawValue !== "string") return;
+                                const value = new Date(rawValue);
+
+                                updateField("end_time", value);
+                            }}>
                                 <label className="font-bold text-lg text-black tracking-wide mb-1">Date Ended</label>
-                                <div className="px-3 py-2 border rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer">
-                                    {kitDetails?.end_time
+                                <input 
+                                    className="px-3 py-2 border rounded-md bg-gray-50 hover:bg-gray-100 cursor-pointer"
+                                    type="text"
+                                    placeholder = {`${kitDetails?.end_time
                                     ? new Date(kitDetails.end_time).toLocaleDateString()
-                                    : "In Progress"}
-                                </div>
-                            </div>
+                                    : "In Progress"}`}
+                                    name="end_time"
+                                />
+                                <button
+                                    type="submit"
+                                    className="self-center bg-purple-300 text-white py-1 mt-2 w-3/5 rounded-md text-sm font-semibold hover:bg-purple-400 active:scale-95 transition"
+                                >
+                                    Save Changes
+                                </button>
+                            </form>
                         </div>
                     </div>
                     }
