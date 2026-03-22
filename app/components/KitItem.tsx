@@ -6,12 +6,11 @@ type Kit = {
   name: string,
   yarn_type: string,
   hook_size: number,
-  start_time: Date,
-  end_time: Date,
+  start_time: Date | null,
+  end_time: Date | null,
   got_from: string, 
   brand: string,
   date_received: Date;
-  yarns: number[]
   image_link: string
 }
 

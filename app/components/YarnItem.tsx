@@ -12,7 +12,7 @@ type Yarn = {
   part_of_kit: boolean,
   image_link: string,
   kit_ids: number[],
-  location: string,
+  gram_weight: number,
   hook_size: number,
   pattern_ids: number[],
 

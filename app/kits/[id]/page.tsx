@@ -17,7 +17,6 @@ type Kit = {
   got_from: string, 
   brand: string,
   date_received: Date,
-  yarns: number[]
   image_link: string,
   duration: number
 }
@@ -28,6 +27,12 @@ export default function KitDetailsPage() {
     const params = useParams();
     const kitId = params.id as string;
 
+        const options: Intl.DateTimeFormatOptions = {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            timeZone: 'UTC',
+    };
     
     async function fetchData() {
         const  {data, error} = await supabase
@@ -101,7 +106,7 @@ export default function KitDetailsPage() {
                                 <div className="text-sm text-gray-500 tracking-wide">Date Started</div>
                                 <div className="text-lg font-semibold text-gray-900">
                                     {kitDetails?.start_time
-                                    ? new Date(kitDetails.start_time).toLocaleDateString()
+                                    ? new Date(kitDetails.start_time).toLocaleDateString('en-US', options)
                                     : "—"}
                                 </div>
                             </div>
@@ -110,7 +115,7 @@ export default function KitDetailsPage() {
                                 <div className="text-sm text-gray-500 tracking-wide">Date Ended</div>
                                 <div className="text-lg font-semibold text-gray-900">
                                     {kitDetails?.end_time
-                                    ? new Date(kitDetails.end_time).toLocaleDateString()
+                                    ? new Date(kitDetails.end_time).toLocaleDateString('en-US', options)
                                     : "—"}
                                 </div>
                             </div>
